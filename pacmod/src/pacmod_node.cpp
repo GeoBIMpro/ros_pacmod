@@ -598,7 +598,7 @@ void can_read()
   SteeringPIDRpt3Msg steering_pid_3_obj;
   SteeringPIDRpt4Msg steering_pid_4_obj;
 
-  const std::chrono::milliseconds loop_pause = std::chrono::milliseconds(25);
+  const std::chrono::milliseconds loop_pause = std::chrono::milliseconds(2);
   bool keep_going = true;
 
   std::chrono::system_clock::time_point next_time = std::chrono::system_clock::now();
@@ -723,7 +723,8 @@ void can_read()
         else if (id == ShiftRptMsg::CAN_ID)
         {
           shift_obj.parse(msg);
-
+if (shift_obj.output != 255)
+{
           pacmod_msgs::SystemRptInt shift_rpt_msg;
           shift_rpt_msg.header.stamp = now;
           shift_rpt_msg.manual_input = shift_obj.manual_input;
@@ -731,6 +732,7 @@ void can_read()
           shift_rpt_msg.output = shift_obj.output;
           shift_rpt_msg.header.stamp = ros::Time::now();
           shift_rpt_pub.publish(shift_rpt_msg);
+}
         }
         else if (id == AccelRptMsg::CAN_ID)
         {
